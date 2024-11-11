@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futures Contract Size Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <style>
+      /* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f4f7fb;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+h3 {
+    color: #555;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Labels and Inputs */
+label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #555;
+}
+
+input, select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+    width: 100%;
+}
+
+input:focus, select:focus {
+    border-color: #007BFF;
+    outline: none;
+    background-color: #fff;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Button Styling */
+button {
+    padding: 12px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:active {
+    background-color: #003f7f;
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Result Section */
+#result {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: left;
+}
+
+#result p {
+    margin: 10px 0;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    label {
+        font-size: 13px;
+    }
+
+    input, select, button {
+        font-size: 15px;
+    }
+
+    /* Adjust Button width */
+    button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    label {
+        font-size: 12px;
+    }
+
+    input, select, button {
+        font-size: 14px;
+    }
+
+    /* Ensure inputs and button fill available space on mobile */
+    input, select, button {
+        width: 100%;
+    }
+
+    /* Adjust Results box on smaller screens */
+    #result {
+        padding: 15px;
+    }
+}
+
+    </style>
+    <div class="container">
+        <h1>Futures Contract Size Calculator</h1>
+        
+        <form id="calcForm">
+            <label for="contract">Select Futures Contract:</label>
+            <select id="contract" name="contract">
+                <option value="NQ">E-mini NASDAQ 100 (NQ)</option>
+                <option value="ES">E-mini S&P 500 (ES)</option>
+                <option value="YM">E-mini Dow Jones (YM)</option>
+                <option value="RTY">E-mini Russell 2000 (RTY)</option>
+                <option value="CL">Crude Oil (CL)</option>
+                <option value="GC">Gold (GC)</option>
+                <option value="SI">Silver (SI)</option>
+                <option value="6E">Euro FX (6E)</option>
+                <option value="ZN">10-Year Treasury Note (ZN)</option>
+                <option value="MES">Mini S&P 500 (MES)</option>
+                <option value="MNQ">Mini NASDAQ 100 (MNQ)</option>
+            </select>
+            <br>
+            
+            <label for="tickSize">Tick Size (Price Movement per Tick):</label>
+            <input type="number" id="tickSize" name="tickSize" readonly>
+            <br>
+            
+            <label for="tickValue">Tick Value (Monetary Value per Tick):</label>
+            <input type="number" id="tickValue" name="tickValue" readonly>
+            <br>
+            
+            <label for="numTicks">Number of Ticks:</label>
+            <input type="number" id="numTicks" name="numTicks" required>
+            <br>
+
+            <label for="accountSize">Select Account Size:</label>
+            <select id="accountSize" name="accountSize" required>
+                <option value="50000">50,000 USD</option>
+                <option value="10000">10,000 USD</option>
+                <option value="150000">150,000 USD</option>
+            </select>
+            <br>
+
+            <label for="riskPercent">Risk % per Trade:</label>
+            <input type="number" id="riskPercent" name="riskPercent" required>
+            <br>
+
+            <button type="submit">Calculate Contract Size and Position Size</button>
+        </form>
+        
+        <h3>Results:</h3>
+        <p id="result">Enter the values above and press "Calculate" to see the result.</p>
+    </div>
+
+    <script>
+        // Data for common futures contracts
+const contractData = {
+    "NQ": {
+        tickSize: 0.25,
+        tickValue: 5
+    },
+    "ES": {
+        tickSize: 0.25,
+        tickValue: 12.50
+    },
+    "YM": {
+        tickSize: 1,
+        tickValue: 5
+    },
+    "RTY": {
+        tickSize: 0.10,
+        tickValue: 5
+    },
+    "CL": {
+        tickSize: 0.01,
+        tickValue: 10
+    },
+    "GC": {
+        tickSize: 0.10,
+        tickValue: 10
+    },
+    "SI": {
+        tickSize: 0.005,
+        tickValue: 25
+    },
+    "6E": {
+        tickSize: 0.0001,
+        tickValue: 12.50
+    },
+    "ZN": {
+        tickSize: 0.5,
+        tickValue: 12.50
+    },
+    "MES": {
+        tickSize: 0.25,
+        tickValue: 5
+    },
+    "MNQ": {
+        tickSize: 0.25,
+        tickValue: 1.25
+    }
+};
+
+// Function to update tick size and tick value based on selected contract
+function updateContractValues() {
+    const selectedContract = document.getElementById("contract").value;
+    const tickSizeField = document.getElementById("tickSize");
+    const tickValueField = document.getElementById("tickValue");
+
+    const contractInfo = contractData[selectedContract];
+
+    if (contractInfo) {
+        // Set the tick size and tick value for the selected contract
+        tickSizeField.value = contractInfo.tickSize;
+        tickValueField.value = contractInfo.tickValue;
+    } else {
+        // Clear the fields if contract data is not found
+        tickSizeField.value = '';
+        tickValueField.value = '';
+    }
+}
+
+// Automatically update values when the contract is changed
+document.getElementById("contract").addEventListener("change", updateContractValues);
+
+// Call the function once to initialize the form
+updateContractValues();
+
+// Handle form submission
+document.getElementById("calcForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    // Get user input
+    const contract = document.getElementById("contract").value;
+    const tickSize = parseFloat(document.getElementById("tickSize").value);
+    const tickValue = parseFloat(document.getElementById("tickValue").value);
+    const numTicks = parseInt(document.getElementById("numTicks").value);
+    const accountSize = parseFloat(document.getElementById("accountSize").value);
+    const riskPercent = parseFloat(document.getElementById("riskPercent").value);
+
+    // Validate inputs
+    if (isNaN(tickSize) || isNaN(tickValue) || isNaN(numTicks) || isNaN(accountSize) || isNaN(riskPercent)) {
+        alert("Please enter valid numbers for all fields.");
+        return;
+    }
+
+    // Calculate the contract size
+    const contractSize = tickSize * tickValue * numTicks;
+
+    // Calculate the risk amount in USD
+    const riskAmount = (riskPercent / 100) * accountSize;
+
+    // Calculate position size (how many contracts to trade)
+    const positionSize = riskAmount / contractSize;
+
+    // Display the results
+    const resultElement = document.getElementById("result");
+    resultElement.innerHTML = `
+        <p><strong>Contract Size:</strong> For ${contract} contract, with ${numTicks} ticks, the contract size is $${contractSize.toFixed(2)}.</p>
+        <p><strong>Risk Amount:</strong> You are risking $${riskAmount.toFixed(2)} based on your account size of $${accountSize.toFixed(2)} and risk percentage of ${riskPercent.toFixed(2)}%.</p>
+        <p><strong>Position Size:</strong> Based on your risk tolerance, you should trade approximately ${positionSize.toFixed(2)} contracts.</p>
+    `;
+});
+
+    </script>
+</body>
+</html>
